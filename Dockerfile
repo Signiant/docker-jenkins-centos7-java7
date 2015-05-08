@@ -2,16 +2,17 @@ FROM signiantdevops/docker-jenkins-centos-base
 MAINTAINER devops@signiant.com
 
 # Install ant
-ENV ANT_VERSION 1.9.0
+ENV ANT_VERSION 1.9.4
 RUN cd && \
-    wget -q http://www.us.apache.org/dist//ant/binaries/apache-ant-${ANT_VERSION}-bin.tar.gz && \
+    wget -q http://www.us.apache.org/dist/ant/binaries/apache-ant-${ANT_VERSION}-bin.tar.gz && \
     tar -xzf apache-ant-${ANT_VERSION}-bin.tar.gz && \
     mv apache-ant-${ANT_VERSION} /usr/local/apache-ant-${ANT_VERSION} && \
     rm apache-ant-${ANT_VERSION}-bin.tar.gz
 RUN sh -c 'echo ANT_HOME=/usr/local/apache-ant-${ANT_VERSION} >> /etc/environment'
+ENV ANT_HOME /usr/local/apache-ant-${ANT_VERSION}
 
 # Install our required ant libs
-RUN curl -O http://subclipse.tigris.org/files/documents/906/35081/svnant-1.1.0-RC2.zip
+COPY ant-libs/*.jar ${ANT_HOME}/lib
 
 # Install maven
 ENV MAVEN_VERSION 3.3.3
