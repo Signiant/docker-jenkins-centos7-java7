@@ -35,23 +35,33 @@ RUN alternatives --install /usr/bin/javaws javaws /usr/java/latest/bin/javaws 20
 RUN alternatives --install /usr/bin/javac javac /usr/java/latest/bin/javac 200000
 
 # Add our bldmgr user
-RUN adduser -u 10012 bldmgr
-RUN passwd -f -u bldmgr
+ENV BUILD_USER bldmgr
+RUN adduser -u 10012 $BUILD_USER
+RUN passwd -f -u $BUILD_USER
 
-# Make bldmgr user require no tty
-RUN echo "Defaults:bldmgr !requiretty" >> /etc/sudoers
+# Make our build user require no tty
+RUN echo "Defaults:$BUILD_USER !requiretty" >> /etc/sudoers
 
 # Add user to sudoers with NOPASSWD
-RUN echo "bldmgr ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+RUN echo "$BUILD_USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Install and configure SSHD (needed by the Jenkins slave-on-demand plugin)
 RUN ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key
 RUN ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key
 RUN sed -ri 's/session    required     pam_loginuid.so/#session    required     pam_loginuid.so/g' /etc/pam.d/sshd
 RUN sed -ri 's/#PermitEmptyPasswords no/PermitEmptyPasswords yes/g' /etc/ssh/sshd_config
-RUN mkdir -p /home/bldmgr/.ssh
-RUN chown bldmgr:bldmgr /home/bldmgr/.ssh
-RUN chmod 700 /home/bldmgr/.ssh
+RUN mkdir -p /home/$BUILD_USER/.ssh
+RUN chown $BUILD_USER:$BUILD_USER /home/$BUILD_USER/.ssh
+RUN chmod 700 /home/$BUILD_USER/.ssh
 
 EXPOSE 22
-CMD /usr/sbin/sshd -D
+
+# This entry will either run this container as a jenkins slave or just start SSHD
+# If we're using the slave-on-demand, we start with SSH (the default)
+
+# Default Jenkins Slave Name
+ENV SLAVE_ID JAVA_NODE
+
+ADD start.sh /home/jenkins/
+
+CMD ["sh", "/home/jenkins/start.sh"]
