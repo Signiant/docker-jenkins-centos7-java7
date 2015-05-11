@@ -7,9 +7,9 @@ fi
 if [ ! -z "$RUN_SLAVE" ]; then
     wget -P /home/jenkins http://$MASTER_ADDR/jnlpJars/slave.jar
     if [ -z "$SECRET" ]; then
-        su - $BUILD_USER -c "java -jar /home/jenkins/slave.jar -jnlpUrl http://$MASTER_ADDR/computer/$SLAVE_ID/slave-agent.jnlp"
+        su - $BUILD_USER -c "export HOME=/home/$BUILD_USER;export OS=$SLAVE_OS;java -jar /home/jenkins/slave.jar -jnlpUrl http://$MASTER_ADDR/computer/$SLAVE_ID/slave-agent.jnlp"
     else
-        su - $BUILD_USER -c "java -jar /home/jenkins/slave.jar -jnlpUrl http://$MASTER_ADDR/computer/$SLAVE_ID/slave-agent.jnlp -secret $SECRET"
+        su - $BUILD_USER -c "export HOME=/home/$BUILD_USER;export OS=$SLAVE_OS;java -jar /home/jenkins/slave.jar -jnlpUrl http://$MASTER_ADDR/computer/$SLAVE_ID/slave-agent.jnlp -secret $SECRET"
     fi
 else
     /usr/sbin/sshd -D
