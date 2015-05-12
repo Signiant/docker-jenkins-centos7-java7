@@ -25,6 +25,7 @@ ENV MAVEN_HOME /usr/share/maven
 # Install Java
 ENV JAVA_VERSION 7u79
 ENV BUILD_VERSION b15
+ENV JAVA_HOME /usr/java/latest
 
 # Downloading Oracle Java
 RUN wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/$JAVA_VERSION-$BUILD_VERSION/jdk-$JAVA_VERSION-linux-x64.rpm" -O /tmp/jdk-7-linux-x64.rpm
@@ -61,6 +62,7 @@ EXPOSE 22
 
 # Default Jenkins Slave Name
 ENV SLAVE_ID JAVA_NODE
+ENV SLAVE_OS Linux
 
 ADD start.sh /home/jenkins/
 
