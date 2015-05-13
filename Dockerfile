@@ -1,32 +1,8 @@
 FROM signiantdevops/docker-jenkins-centos-base
 MAINTAINER devops@signiant.com
 
-# Add our bldmgr user
 ENV BUILD_USER bldmgr
-ENV BUILD_USER_ID 10012
 ENV BUILD_USER_GROUP users
-
-RUN adduser -u $BUILD_USER_ID -g $BUILD_USER_GROUP $BUILD_USER
-RUN passwd -f -u $BUILD_USER
-
-# Create the folder we use for Jenkins workspaces across all nodes
-RUN mkdir -p /var/lib/jenkins
-RUN chown -R $BUILD_USER:$BUILD_USER_GROUP /var/lib/jenkins
-
-# Make our build user require no tty
-RUN echo "Defaults:$BUILD_USER !requiretty" >> /etc/sudoers
-
-# Add user to sudoers with NOPASSWD
-RUN echo "$BUILD_USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-
-# Install and configure SSHD (needed by the Jenkins slave-on-demand plugin)
-RUN ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key
-RUN ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key
-RUN sed -ri 's/session    required     pam_loginuid.so/#session    required     pam_loginuid.so/g' /etc/pam.d/sshd
-RUN sed -ri 's/#PermitEmptyPasswords no/PermitEmptyPasswords yes/g' /etc/ssh/sshd_config
-RUN mkdir -p /home/$BUILD_USER/.ssh
-RUN chown $BUILD_USER:$BUILD_USER_GROUP /home/$BUILD_USER/.ssh
-RUN chmod 700 /home/$BUILD_USER/.ssh
 
 # Install ant
 ENV ANT_VERSION 1.9.4
@@ -65,8 +41,10 @@ RUN alternatives --install /usr/bin/javac javac /usr/java/latest/bin/javac 20000
 
 # Install findbugs
 ENV FINDBUGS_VERSION 2.0.3
-RUN curl -fsSL http://hivelocity.dl.sourceforge.net/project/findbugs/findbugs/$FINDBUGS_VERSION/findbugs-$FINDBUGS_VERSION.tar.gz | tar xzf - -C /home/bldmgr \
-  && chown -R $BUILD_USER:$BUILD_USER_GROUP /home/$BUILD_USER
+RUN curl -fsSL http://hivelocity.dl.sourceforge.net/project/findbugs/findbugs/$FINDBUGS_VERSION/findbugs-$FINDBUGS_VERSION.tar.gz | tar xzf - -C /home/$BUILD_USER
+
+# Make sure anything/everything we put in the build user's home dir is owned correctly
+RUN chown -R $BUILD_USER:$BUILD_USER_GROUP /home/$BUILD_USER  
 
 EXPOSE 22
 
