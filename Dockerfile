@@ -43,6 +43,11 @@ RUN alternatives --install /usr/bin/javac javac /usr/java/latest/bin/javac 20000
 ENV FINDBUGS_VERSION 2.0.3
 RUN curl -fsSL http://hivelocity.dl.sourceforge.net/project/findbugs/findbugs/$FINDBUGS_VERSION/findbugs-$FINDBUGS_VERSION.tar.gz | tar xzf - -C /home/$BUILD_USER
 
+# Install Compass
+RUN yum install -y ruby ruby-devel rubygems
+RUN gem update --system
+RUN gem install compass
+
 # Make sure anything/everything we put in the build user's home dir is owned correctly
 RUN chown -R $BUILD_USER:$BUILD_USER_GROUP /home/$BUILD_USER  
 
