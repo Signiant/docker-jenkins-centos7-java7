@@ -9,7 +9,7 @@ Container for a Jenkins build node that is used to build java projects
 - SLAVE_ID: The name of the slave already pre-created in the Jenkins master
 - SECRET: The secret for the Jenkins slave (obtained in the Jenkins master UI for this slave)
 
-## Example Docker RUN_SLAVE
+## Example Docker run
 
 ```
 #!/bin/bash
