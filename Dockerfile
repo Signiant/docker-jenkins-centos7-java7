@@ -4,6 +4,10 @@ MAINTAINER devops@signiant.com
 ENV BUILD_USER bldmgr
 ENV BUILD_USER_GROUP users
 
+# Set the timezone
+RUN sed -ri '/ZONE=/c ZONE="America\/New York"' /etc/sysconfig/clock
+RUN rm -f /etc/localtime && ln -s /usr/share/zoneinfo/America/New_York /etc/localtime
+ 
 # Install ant
 ENV ANT_VERSION 1.9.4
 RUN cd && \
