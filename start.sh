@@ -10,6 +10,9 @@ if [ -d "/credentials" ]; then
 	done
 fi
 
+# Just in case some of the tar files do not set correct owner
+chown -R $BUILD_USER:$BUILD_USER_GROUP /home/$BUILD_USER
+
 if [ ! -z "$RUN_SLAVE" ]; then
     echo "Downloading jenkins slave from $MASTER_ADDR"
     wget -P / http://$MASTER_ADDR/jnlpJars/slave.jar

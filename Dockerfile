@@ -1,4 +1,4 @@
-FROM signiantdevops/docker-jenkins-centos-base
+FROM signiantdevops/docker-jenkins-centos-base:centos6
 MAINTAINER devops@signiant.com
 
 ENV BUILD_USER bldmgr
