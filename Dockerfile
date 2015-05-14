@@ -18,13 +18,6 @@ ENV ANT_HOME /usr/local/apache-ant-${ANT_VERSION}
 COPY ant-libs/*.jar ${ANT_HOME}/lib/
 RUN chmod 644 ${ANT_HOME}/lib/*.jar
 
-# Install maven
-ENV MAVEN_VERSION 3.3.3
-RUN curl -fsSL http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar xzf - -C /usr/share \
-  && mv /usr/share/apache-maven-$MAVEN_VERSION /usr/share/maven \
-  && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
-ENV MAVEN_HOME /usr/share/maven
-
 # Install Java
 ENV JAVA_VERSION 7u79
 ENV BUILD_VERSION b15
