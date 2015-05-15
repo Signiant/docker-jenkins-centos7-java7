@@ -29,11 +29,4 @@ if [ ! -z "$RUN_SLAVE" ]; then
                              export OS=$SLAVE_OS;\
           java -jar /slave.jar -jnlpUrl http://$MASTER_ADDR/computer/$SLAVE_ID/slave-agent.jnlp -secret $SECRET"
     fi
-else
-    echo "Starting SSH daemon"
-    export HOME=/home/$BUILD_USER;\
-    export JAVA_HOME=$JAVA_HOME;\
-    export MAVEN_HOME=$MAVEN_HOME;\
-    export OS=$SLAVE_OS;\
-    /usr/sbin/sshd -D
 fi
