@@ -1,0 +1,15 @@
+ruby
+ruby-devel
+rubygems
+GraphicsMagick
+cairo
+cairo-devel
+cairomm-devel
+libjpeg-turbo-devel
+pango
+pango-devel
+pangomm
+pangomm-devel
+giflib-devel
+liberation-sans-fonts.noarch
+libpng-devel
