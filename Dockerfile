@@ -20,6 +20,11 @@ COPY yum-packages.list /tmp/yum.packages.list
 RUN chmod +r /tmp/yum.packages.list
 RUN yum install -y -q `cat /tmp/yum.packages.list`
 
+# Install jboss
+RUN wget http://sourceforge.net/projects/jboss/files/JBoss/JBoss-5.1.0.GA/jboss-5.1.0.GA.zip/download -O /tmp/jboss-5.1.0.GA.zip
+RUN unzip -q /tmp/jboss-5.1.0.GA.zip -d /usr/local
+RUN rm -f /tmp/jboss-5.1.0.GA.zip
+
 # Install Compass
 RUN gem update --system
 RUN gem install compass
