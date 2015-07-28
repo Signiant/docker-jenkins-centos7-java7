@@ -5,8 +5,8 @@ ENV BUILD_USER bldmgr
 ENV BUILD_USER_GROUP users
 
 # Set the timezone
-RUN sed -ri '/ZONE=/c ZONE="America\/New York"' /etc/sysconfig/clock
-RUN rm -f /etc/localtime && ln -s /usr/share/zoneinfo/America/New_York /etc/localtime
+RUN unlink /etc/localtime
+RUN ln -s /usr/share/zoneinfo/America/New_York /etc/localtime
 
 # Install maven
 ENV MAVEN_VERSION 3.2.1
@@ -26,6 +26,7 @@ RUN unzip -q /tmp/jboss-5.1.0.GA.zip -d /usr/local
 RUN rm -f /tmp/jboss-5.1.0.GA.zip
 
 # Install Compass
+RUN gem install json_pure
 RUN gem update --system
 RUN gem install compass
 

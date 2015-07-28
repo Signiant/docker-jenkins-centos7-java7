@@ -1,4 +1,5 @@
 ruby
+make
 ruby-devel
 rubygems
 GraphicsMagick
