@@ -44,9 +44,6 @@ RUN npm install -g grunt
 RUN npm install -g grunt-cli
 RUN npm install -g phantomjs
 
-# We have to use this fixed version otherwise we get fatal error: socket hang up errors
-RUN npm install -g grunt-connect-proxy@0.1.10
-
 # Install the AWS CLI - used by some build processes
 RUN pip install awscli
 
