@@ -32,6 +32,13 @@ RUN gem install compass
 
 # Update node and npm
 RUN npm install -g npm@latest-2
+
+# Install n to switch to a given node version
+RUN npm install -g n
+RUN echo Installing node version 4.4.3
+RUN n 4.4.3
+
+# Pre-install node packages
 RUN npm install -g bower
 RUN npm install -g grunt
 RUN npm install -g grunt-cli
@@ -44,7 +51,7 @@ RUN npm install -g grunt-connect-proxy@0.1.10
 RUN pip install awscli
 
 # Make sure anything/everything we put in the build user's home dir is owned correctly
-RUN chown -R $BUILD_USER:$BUILD_USER_GROUP /home/$BUILD_USER  
+RUN chown -R $BUILD_USER:$BUILD_USER_GROUP /home/$BUILD_USER
 
 EXPOSE 22
 
