@@ -5,8 +5,8 @@ ENV BUILD_USER bldmgr
 ENV BUILD_USER_GROUP users
 
 # Set the timezone
-RUN unlink /etc/localtime \
-  && ln -s /usr/share/zoneinfo/America/New_York /etc/localtime
+RUN unlink /etc/localtime
+RUN ln -s /usr/share/zoneinfo/America/New_York /etc/localtime
 
 # Install maven
 ENV MAVEN_VERSION 3.2.1
@@ -17,31 +17,38 @@ ENV MAVEN_HOME /usr/share/maven
 
 # Install yum packages required for build node
 COPY yum-packages.list /tmp/yum.packages.list
-RUN chmod +r /tmp/yum.packages.list \
-  && yum install -y -q `cat /tmp/yum.packages.list`
+RUN chmod +r /tmp/yum.packages.list
+RUN yum install -y -q `cat /tmp/yum.packages.list`
 
 # Install jboss
-RUN wget http://sourceforge.net/projects/jboss/files/JBoss/JBoss-5.1.0.GA/jboss-5.1.0.GA.zip/download -O /tmp/jboss-5.1.0.GA.zip \
-  && unzip -q /tmp/jboss-5.1.0.GA.zip -d /usr/local \
-  && rm -f /tmp/jboss-5.1.0.GA.zip
+RUN wget http://sourceforge.net/projects/jboss/files/JBoss/JBoss-5.1.0.GA/jboss-5.1.0.GA.zip/download -O /tmp/jboss-5.1.0.GA.zip
+RUN unzip -q /tmp/jboss-5.1.0.GA.zip -d /usr/local
+RUN rm -f /tmp/jboss-5.1.0.GA.zip
 
 # Install Compass
-RUN gem install json_pure \
-  && gem update --system \
-  && gem install compass
+RUN gem install json_pure
+RUN gem update --system
+RUN gem install compass
 
 # Update node and npm
-# - We have to use fixed grunt-connect-proxy version otherwise we get fatal error: socket hang up errors
-RUN npm version && npm install -g npm@${NPM_VERSION} && npm version \
-  && npm install -g bower grunt@0.4 grunt-cli grunt-connect-proxy@0.1.10 n phantomjs-prebuilt
+RUN npm install -g npm
+
+# Install n to switch to a given node version
+RUN npm install -g n
+RUN echo Installing node version 5.1.0
+RUN n 5.1.0
+
+# Pre-install node packages
+RUN npm install -g bower
+RUN npm install -g grunt
+RUN npm install -g grunt-cli
+RUN npm install -g phantomjs
 
 # Install the AWS CLI - used by some build processes
 RUN pip install awscli
 
-RUN yum clean all
-
 # Make sure anything/everything we put in the build user's home dir is owned correctly
-RUN chown -R $BUILD_USER:$BUILD_USER_GROUP /home/$BUILD_USER  
+RUN chown -R $BUILD_USER:$BUILD_USER_GROUP /home/$BUILD_USER
 
 EXPOSE 22
 
@@ -56,3 +63,4 @@ ADD start.sh /
 RUN chmod 777 /start.sh
 
 CMD ["sh", "/start.sh"]
+
