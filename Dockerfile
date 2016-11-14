@@ -27,7 +27,6 @@ RUN rm -f /tmp/jboss-5.1.0.GA.zip
 
 # Install Compass
 RUN gem install json_pure
-RUN gem update --system
 RUN gem install compass
 
 # Update node and npm
@@ -35,8 +34,8 @@ RUN npm install -g npm
 
 # Install n to switch to a given node version
 RUN npm install -g n
-RUN echo Installing node version 5.1.0
-RUN n 5.1.0
+RUN echo Installing node version 6.9.1
+RUN n 6.9.1
 
 # Pre-install node packages
 RUN npm install -g bower
