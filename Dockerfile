@@ -33,7 +33,7 @@ RUN gem install json_pure \
 # Update node and npm
 # - We have to use fixed grunt-connect-proxy version otherwise we get fatal error: socket hang up errors
 RUN npm version && npm install -g npm@${NPM_VERSION} && npm version \
-  && npm install -g bower grunt@0.4 grunt-cli grunt-connect-proxy@0.1.10 n phantomjs-prebuilt
+  && npm install -g bower n phantomjs-prebuilt
 
 # Install the AWS CLI - used by some build processes
 RUN pip install awscli
@@ -41,7 +41,7 @@ RUN pip install awscli
 RUN yum clean all
 
 # Make sure anything/everything we put in the build user's home dir is owned correctly
-RUN chown -R $BUILD_USER:$BUILD_USER_GROUP /home/$BUILD_USER  
+RUN chown -R $BUILD_USER:$BUILD_USER_GROUP /home/$BUILD_USER
 
 EXPOSE 22
 
