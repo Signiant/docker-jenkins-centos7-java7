@@ -33,7 +33,7 @@ RUN gem install json_pure \
 # Update node and npm
 # - We have to use fixed grunt-connect-proxy version otherwise we get fatal error: socket hang up errors
 
-ENV NPM_VERSION 5
+ENV NPM_VERSION 2
 
 RUN npm version && npm install -g npm@$NPM_VERSION && npm version \
   && npm install -g bower grunt@0.4 grunt-cli grunt-connect-proxy@0.1.10 n phantomjs-prebuilt whitesource
